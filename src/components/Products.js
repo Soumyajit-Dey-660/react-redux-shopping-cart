@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
-import fomatCurrency from '../utils';
+import formatCurrency from '../utils';
 
-const Products = ({ productsData }) => {
+const Products = ({ productsData, addToCart }) => {
     return (
         <div>
             <ul className='products'>
@@ -15,8 +15,8 @@ const Products = ({ productsData }) => {
                                 <p>{product.title}</p>
                             </a>
                             <div className="product-price">
-                                <div>{fomatCurrency(product.price)}</div>
-                                <button className="button primary">Add To Cart</button>
+                                <div>{formatCurrency(product.price)}</div>
+                                <button onClick={() => addToCart(product)} className="button primary">Add To Cart</button>
                             </div>
                         </div>
                     </li>

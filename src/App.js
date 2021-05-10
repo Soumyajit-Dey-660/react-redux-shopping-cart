@@ -3,13 +3,41 @@ import React, { useState } from 'react';
 import data from './data.json';
 import Products from './components/Products';
 import Filter from './components/Filter';
+import Cart from './components/Cart';
 
 const App = () => {
   const [productsData, setProductsData] = useState({
     products: data.products,
+    cartItems: [],
     size: '',
     sort: ''
   });
+
+  const addToCart = product => {
+    const cartItems = productsData.cartItems.slice();
+    let alreadyInCart = false;
+    cartItems.forEach(item => {
+      if (item._id === product._id) {
+        item.count++;
+        alreadyInCart = true;
+      }
+    })
+    if (!alreadyInCart) {
+      cartItems.push({ ...product, count: 1 })
+    }
+    setProductsData({
+      ...productsData,
+      cartItems: cartItems
+    })
+  }
+
+  const removeFromCart = product => {
+    const cartItems = productsData.cartItems.slice();
+    setProductsData({
+      ...productsData,
+      cartItems: cartItems.filter(item => item._id !== product._id)
+    })
+  }
 
   const handleSort = event => {
     // console.log(event.target.value);
@@ -61,10 +89,16 @@ const App = () => {
               handleSort={handleSort}
               handleSize={handleSize}
             />
-            <Products productsData={productsData} />
+            <Products 
+              productsData={productsData} 
+              addToCart={addToCart}
+            />
           </div>
           <div className="sidebar">
-            Cart Items
+            <Cart 
+              cartItems={productsData.cartItems}
+              removeFromCart={removeFromCart}
+            />
           </div>
         </div>
       </main>
