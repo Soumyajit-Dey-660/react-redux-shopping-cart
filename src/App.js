@@ -8,7 +8,7 @@ import Cart from './components/Cart';
 const App = () => {
   const [productsData, setProductsData] = useState({
     products: data.products,
-    cartItems: [],
+    cartItems: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [],
     size: '',
     sort: ''
   });
@@ -29,6 +29,7 @@ const App = () => {
       ...productsData,
       cartItems: cartItems
     })
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }
 
   const removeFromCart = product => {
@@ -37,6 +38,7 @@ const App = () => {
       ...productsData,
       cartItems: cartItems.filter(item => item._id !== product._id)
     })
+    localStorage.setItem('cartItems', JSON.stringify(cartItems.filter(item => item._id !== product._id)));
   }
 
   const handleSort = event => {
@@ -76,6 +78,10 @@ const App = () => {
     }
   }
 
+  const createOrder = order => {
+    alert("Order placed for "+order.name)
+  }
+
   return (
     <div className="grid-container">
       <header><a href='/'>React Shopping Cart</a></header>
@@ -98,6 +104,7 @@ const App = () => {
             <Cart 
               cartItems={productsData.cartItems}
               removeFromCart={removeFromCart}
+              createOrder={createOrder}
             />
           </div>
         </div>

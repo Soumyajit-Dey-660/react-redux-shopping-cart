@@ -2,50 +2,50 @@
     "products": [
         {
             "_id": "dress1",
-            "title": "Dress 1",
+            "title": "Designer Lehenga",
             "image": "images/dress1.jpg",
-            "description": "about dress 1",
-            "price": 19,
+            "description": "Traditional designer lehenga",
+            "price": 10000,
             "availableSizes": ["XL", "XXL"]
         },
         {
             "_id": "dress2",
-            "title": "Dress 2",
+            "title": "Stylish Dress",
             "image": "images/dress2.jpg",
             "description": "about dress 2",
-            "price": 29.9,
+            "price": 6500,
             "availableSizes": ["M", "L", "XL", "XXL"]
         },
         {
             "_id": "dress3",
-            "title": "Dress 3",
+            "title": "Short Dress",
             "image": "images/dress3.jpg",
-            "description": "about dress 3",
-            "price": 40,
+            "description": "Cool short dress",
+            "price": 4500,
             "availableSizes": ["S", "M", "L", "XL", "XXL"]
         },
         {
             "_id": "dress4",
-            "title": "Dress 4",
+            "title": "Designer Salwar",
             "image": "images/dress4.jpg",
-            "description": "about dress 4",
-            "price": 14.9,
+            "description": "Fancy designer salwar",
+            "price": 7500,
             "availableSizes": ["S", "M", "L", "XL", "XXL"]
         },
         {
             "_id": "dress5",
-            "title": "Dress 5",
+            "title": "Comfy Dress",
             "image": "images/dress5.jpg",
-            "description": "about dress 5",
-            "price": 35,
+            "description": "Perfect, comfortable dress",
+            "price": 3500,
             "availableSizes": ["S", "XL", "XXL"]
         },
         {
             "_id": "dress6",
-            "title": "Dress 6",
+            "title": "Comfy dress 2",
             "image": "images/dress6.jpg",
-            "description": "about dress 6",
-            "price": 25,
+            "description": "Dress with traditional design",
+            "price": 5000,
             "availableSizes": ["M", "L", "XXL"]
         }
     ] 
