@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import formatCurrency from '../utils';
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import Modal from 'react-modal';
+import { connect } from 'react-redux';
+import { fetchProducts } from '../actionCreators/productActions';
 
-const Products = ({ productsData, addToCart }) => {
+const Products = (props) => {
     const [product, setProduct] = useState(null);
 
     const openModal = product => {
@@ -16,25 +18,34 @@ const Products = ({ productsData, addToCart }) => {
     const closeModal = () => {
         setProduct(null);
     }
+
+    useEffect(() => {
+        console.log('did mount?')
+        props.getProducts();
+    }, [])
+
     return (
         <div>
             <Fade bottom cascade>
-                <ul className='products'>
-                    {productsData.products.map(product => (
-                        <li key={product._id}>
-                            <div className="product">
-                                <a href={"#" + product._id} onClick={() => openModal(product)}>
-                                    <img src={product.image} alt={product.title}></img>
-                                    <p>{product.title}</p>
-                                </a>
-                                <div className="product-price">
-                                    <div>{formatCurrency(product.price)}</div>
-                                    <button onClick={() => addToCart(product)} className="button primary">Add To Cart</button>
+                {props.loading ? "Loading..." :
+                    props.error ? props.error :
+                    <ul className='products'>
+                        {props.items.map(product => (
+                            <li key={product._id}>
+                                <div className="product">
+                                    <a href={"#" + product._id} onClick={() => openModal(product)}>
+                                        <img src={product.image} alt={product.title}></img>
+                                        <p>{product.title}</p>
+                                    </a>
+                                    <div className="product-price">
+                                        <div>{formatCurrency(product.price)}</div>
+                                        <button onClick={() => props.addToCart(product)} className="button primary">Add To Cart</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                            </li>
+                        ))}
+                    </ul>}
+
             </Fade>
             {product && (
                 <Modal
@@ -48,16 +59,16 @@ const Products = ({ productsData, addToCart }) => {
                             <div className="product-details-description">
                                 <p><strong>{product.title}</strong></p>
                                 <p>{product.description}</p>
-                                <p>Available Sizes:{" "} {product.availableSizes.map(size =>(
+                                <p>Available Sizes:{" "} {product.availableSizes.map(size => (
                                     <span>{" "}
-                                    <button className="button">{size}</button>
+                                        <button className="button">{size}</button>
                                     </span>
                                 ))}
                                 </p>
                                 <div className="product-price">
                                     <div>{formatCurrency(product.price)}</div>
                                     <button className="button primary" onClick={() => {
-                                        addToCart(product);
+                                        props.addToCart(product);
                                         closeModal();
                                     }}>Add To Cart</button>
                                 </div>
@@ -70,4 +81,17 @@ const Products = ({ productsData, addToCart }) => {
     )
 }
 
-export default Products
+const mapStateToProps = state => {
+    return {
+        loading: state.products.loading,
+        error: state.products.error,
+        items: state.products.items
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getProducts: () => dispatch(fetchProducts())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
