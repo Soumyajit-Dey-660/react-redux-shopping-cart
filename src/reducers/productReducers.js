@@ -1,9 +1,16 @@
-import { FETCH_PRODUCTS_STARTED, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_FAILURE } from '../actionTypes';
+import { FETCH_PRODUCTS_STARTED, 
+FETCH_PRODUCTS_SUCCESS, 
+FETCH_PRODUCTS_FAILURE,
+FILTER_PRODUCTS_BY_SIZE,
+ORDER_PRODUCTS_BY_PRICE } from '../actionTypes';
 
 const initialState = {
     loading: false,
     error: null,
-    items: []
+    items: [],
+    filteredItems: [],
+    size: '',
+    price: ''
 };
 
 export const productsReducer = (state = initialState, action) => {
@@ -18,13 +25,26 @@ export const productsReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 error: null,
-                items: action.payload
+                items: action.payload,
+                filteredItems: action.payload
             }
         case FETCH_PRODUCTS_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: action.payload,
+            }
+        case FILTER_PRODUCTS_BY_SIZE:
+            return {
+                ...state,
+                size: action.payload.size,
+                filteredItems: action.payload.items
+            }
+        case ORDER_PRODUCTS_BY_PRICE:
+            return {
+                ...state,
+                price: action.payload.price,
+                filteredItems: action.payload.items
             }
         default: return state;
     }

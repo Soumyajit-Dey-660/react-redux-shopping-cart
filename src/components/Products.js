@@ -85,7 +85,7 @@ const mapStateToProps = state => {
     return {
         loading: state.products.loading,
         error: state.products.error,
-        items: state.products.items
+        items: state.products.filteredItems
     }
 }
 
