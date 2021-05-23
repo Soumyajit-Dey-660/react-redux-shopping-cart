@@ -39,25 +39,21 @@ const filteredBySize = (products, size) => {
 
 const orderByPrice = (products, price) => {
     const sortedProducts = products.slice();
-    console.log('PRICE ', price)
+    // console.log('PRICE ', price, sortedProducts)
     if (price === 'latest') {
         sortedProducts.sort((a, b) => a._id > b._id ? 1 : -1);
     } else {
         if (price === 'lowest')
             sortedProducts.sort((a, b) => a.price > b.price ? 1 : -1);
-        else
-            sortedProducts.sort((a, b) => a.price < b.price ? 1 : -1)
+        else if (price === 'highest')
+            sortedProducts.sort((a, b) => a.price < b.price ? 1 : -1);
     }
+    // console.log('After sorting, sorted products is ', sortedProducts)
     return {
         type: ORDER_PRODUCTS_BY_PRICE,
         payload: {
             price: price,
             items: sortedProducts
-            // price === '' 
-            // ? products.sort((a, b) => a._id > b._id)
-            // : price === 'lowest' 
-            // ? products
-            // : products.sort((a, b) => a.price < b.price ? 1 : -1)
         }
     }
 }

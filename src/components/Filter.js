@@ -9,7 +9,7 @@ const Filter = (props) => {
         <div className="filter">
                 <div className="filter-result">{props.filteredProducts.length} Products</div>
             <div className="filter-sort">
-                    Order {" "} <select value={props.sort} onChange={(e) => props.sortByPrice(props.filteredProducts, e.target.value)}>
+                    Order {" "} <select value={props.sort} onChange={(e) => props.sortByPrice(props.products, e.target.value)}>
                     <option value="latest">Latest</option>
                     <option value="lowest">Lowest</option>
                     <option value="highest">Highest</option>

@@ -7,6 +7,7 @@ import Zoom from 'react-reveal/Zoom';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../actionCreators/productActions';
+import { addToCart } from '../actionCreators/cartActions';
 
 const Products = (props) => {
     const [product, setProduct] = useState(null);
@@ -20,7 +21,6 @@ const Products = (props) => {
     }
 
     useEffect(() => {
-        console.log('did mount?')
         props.getProducts();
     }, [])
 
@@ -70,7 +70,7 @@ const Products = (props) => {
                                     <button className="button primary" onClick={() => {
                                         props.addToCart(product);
                                         closeModal();
-                                    }}>Add To Cart</button>
+                                    }}>Add To Cart</button> 
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getProducts: () => dispatch(fetchProducts())
+        getProducts: () => dispatch(fetchProducts()),
+        addToCart: product => dispatch(addToCart(product))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

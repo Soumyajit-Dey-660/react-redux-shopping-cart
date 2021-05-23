@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { removeFromCart } from '../actionCreators/cartActions'
 import formatCurrency from '../utils';
 import Fade from 'react-reveal/Fade';
 
-const Cart = ({ cartItems, removeFromCart, createOrder }) => {
+const Cart = (props) => {
     const [showCheckout, setShowCheckout] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -27,54 +29,55 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
         })
     }
 
-    const createOrderObj = event => {
-        event.preventDefault();
-        const order = {
-            name: userInfo.name,
-            email: userInfo.email,
-            address: userInfo.address,
-            cartItems: cartItems
-        }
-        console.log(order)
-        createOrder(order);
-    }
+    // const createOrderObj = event => {
+    //     event.preventDefault();
+    //     const order = {
+    //         name: userInfo.name,
+    //         email: userInfo.email,
+    //         address: userInfo.address,
+    //         cartItems: cartItems
+    //     }
+    //     console.log(order)
+    //     createOrder(order);
+    // }
+    const createOrderObj = () => {}
 
     return (
         <>
             {/* Cart Header */}
             <div>
-                {cartItems.length === 0 ? (
+                {props.items.length === 0 ? (
 
                     <div className="cart cart-header">Cart Is Empty</div>
                 ) : (
-                    <div className="cart cart-header">You have {getTotalItems(cartItems)} items in the cart {" "}</div>
+                    <div className="cart cart-header">You have {getTotalItems(props.items)} items in the cart {" "}</div>
                 )}
             </div>
             {/* Cart Items display */}
             <div className="cart">
                 <Fade left cascade>
                     <ul className="cart-items">
-                        {cartItems.map(item =>
+                        {props.items.map(item =>
                         (<li key={item._id}>
                             <div>
                                 <img src={item.image} alt={item.title}></img>
                             </div>
-                            <div>{cartItems.title}</div>
+                            <div>{props.items.title}</div> {/*  props.cartItems.title */}
                             <div className="right">
                                 {formatCurrency(item.price)} X {item.count}{" "}
-                                <button className="button" onClick={() => removeFromCart(item)}>Remove</button>
+                                <button className="button" onClick={() => props.removeFromCart(item)}>Remove</button>
                             </div>
                         </li>))}
                     </ul>
                 </Fade>
             </div>
-            {cartItems.length !== 0 && (
+            {props.items.length !== 0 && (
                 <div>
                     <div className="cart">
                         <div className="total">
                             <div>
                                 Total{" "}
-                                {formatCurrency(cartItems.reduce((a, item) => a + (item.price * item.count), 0))}</div>
+                                {formatCurrency(props.items.reduce((a, item) => a + (item.price * item.count), 0))}</div>
                             <button
                                 onClick={proccedCheckout}
                                 // onClick={setShowCheckout(true)} 
@@ -134,4 +137,16 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
     )
 }
 
-export default Cart
+const mapStateToProps = state => {
+    return {
+        items: state.cart.cartItems
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        removeFromCart: product => dispatch(removeFromCart(product))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)
