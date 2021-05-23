@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from '../actionTypes';
+import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART } from '../actionTypes';
 
 const addItemToCart = product => {
     const cartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [];
@@ -29,6 +29,16 @@ const removeItemFromCart = product => {
             cartItems: cartItems
         }
     }
+}
+
+const clearCartAction = () => {
+    return {
+        type: CLEAR_CART
+    }
+}
+
+export const clearCart = () => dispatch => {
+    dispatch(clearCartAction())
 }
 
 export const addToCart = (items, product) => dispatch => {

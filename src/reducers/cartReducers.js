@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from '../actionTypes';
+import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART } from '../actionTypes';
 
 const initialState = JSON.parse(localStorage.getItem('cartItems')) ? {cartItems: JSON.parse(localStorage.getItem('cartItems'))} : {cartItems: []};
 export const cartReducer = (state = initialState, action) => {
@@ -12,6 +12,11 @@ export const cartReducer = (state = initialState, action) => {
             return {
                 ...state,
                 cartItems: action.payload.cartItems
+            }
+        case CLEAR_CART:
+            return {
+                ...state,
+                cartItems: []
             }
         default: return state;
     }
