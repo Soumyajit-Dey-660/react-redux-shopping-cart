@@ -242,3 +242,31 @@ input {
   top: 2.5rem;
   z-index: 1000;
 }
+
+/* Placed Order Details */
+.order-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%
+}
+
+.order-details li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-details li div {
+  padding: 0.75em;
+}
+
+.order-details .items {
+  text-align: right;
+  padding: 0;
+}
+
+.success-message {
+  color: green;
+}

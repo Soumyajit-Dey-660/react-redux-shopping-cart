@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { removeFromCart } from '../actionCreators/cartActions'
+import { removeFromCart } from '../actionCreators/cartActions';
+import { createOrder, clearOrder } from '../actionCreators/orderActions';
+import { clearCart } from '../actionCreators/cartActions';
+import Modal from 'react-modal';
+import Zoom from 'react-reveal/Zoom';
 import formatCurrency from '../utils';
 import Fade from 'react-reveal/Fade';
 
@@ -29,18 +33,29 @@ const Cart = (props) => {
         })
     }
 
-    // const createOrderObj = event => {
-    //     event.preventDefault();
-    //     const order = {
-    //         name: userInfo.name,
-    //         email: userInfo.email,
-    //         address: userInfo.address,
-    //         cartItems: cartItems
-    //     }
-    //     console.log(order)
-    //     createOrder(order);
-    // }
-    const createOrderObj = () => {}
+    const createOrderObj = event => {
+        event.preventDefault();
+        const order = {
+            name: userInfo.name,
+            email: userInfo.email,
+            address: userInfo.address,
+            cartItems: props.items,
+            total: props.items.reduce((a, b) => a + b.price * b.count, 0)
+        }
+        console.log(order);
+        props.createOrder(order);
+        props.clearCart();
+        setShowCheckout(false);
+    }
+
+    const closeModal = () => {
+        props.clearOrder();
+    }
+
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
 
     return (
         <>
@@ -52,6 +67,49 @@ const Cart = (props) => {
                 ) : (
                     <div className="cart cart-header">You have {getTotalItems(props.items)} items in the cart {" "}</div>
                 )}
+                {props.order.cartItems && 
+                    <Modal
+                        isOpen={true}
+                        onRequestClose={closeModal}
+                    >
+                        <Zoom>
+                            <button className='close-modal' onClick={closeModal}>x</button>
+                            <div className='order-details'>
+                                <h3 className='success-message'>Your order has been placed</h3>
+                                <h2>Order {props.order._id}</h2>
+                                <ul>
+                                    <li>
+                                        <div>Name:</div>
+                                        <div>{props.order.name}</div>
+                                    </li>
+                                    <li>
+                                        <div>Email:</div>
+                                        <div>{props.order.email}</div>
+                                    </li>
+                                    <li>
+                                        <div>Address:</div>
+                                        <div>{props.order.address}</div>
+                                    </li>
+                                    <li>
+                                        <div>Date:</div>
+                                        <div>{formatDate(props.order.createdAt)}</div>
+                                    </li>
+                                    <li>
+                                        <div>Total:</div>
+                                        <div>{formatCurrency(props.order.total)}</div>
+                                    </li>
+                                    <li>
+                                        <div>Cart Items:</div>
+                                        <div>{props.order.cartItems.map(item => (
+                                            <div>
+                                                {item.count} x {item.title}
+                                            </div>
+                                        ))}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </Zoom>
+                    </Modal>}
             </div>
             {/* Cart Items display */}
             <div className="cart">
@@ -79,8 +137,7 @@ const Cart = (props) => {
                                 Total{" "}
                                 {formatCurrency(props.items.reduce((a, item) => a + (item.price * item.count), 0))}</div>
                             <button
-                                onClick={proccedCheckout}
-                                // onClick={setShowCheckout(true)} 
+                                onClick={proccedCheckout} 
                                 className="button primary"
                             >Proceed</button>
                         </div>
@@ -139,13 +196,17 @@ const Cart = (props) => {
 
 const mapStateToProps = state => {
     return {
+        order: state.order.order,
         items: state.cart.cartItems
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeFromCart: product => dispatch(removeFromCart(product))
+        removeFromCart: product => dispatch(removeFromCart(product)),
+        createOrder: order => dispatch(createOrder(order)),
+        clearOrder: () => dispatch(clearOrder()),
+        clearCart: () => dispatch(clearCart())
     }
 }
 

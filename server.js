@@ -101,5 +101,36 @@ app.delete('/api/products/:id', async (req, res) => {
     }
 })
 
+const Order = mongoose.model('order', new mongoose.Schema({
+    _id: { type: String, default: shortId.generate},
+    email: String,
+    name: String,
+    address: String,
+    total: Number,
+    cartItems: [{
+        _id: String,
+        title: String,
+        price: Number,
+        count: Number
+    }]
+    }, {
+        timestamps: true
+    }
+));
+
+app.post('/api/orders', async (req, res) => {
+    try {
+        const { name, email, address, total, cartItems } = req.body;
+        console.log('email ',email);
+        if (!name || !email || !address || !total || !cartItems) {
+            res.status(201).send({error: true, message: 'Please fill in all required fields'})
+        }
+        const order = await Order(req.body).save();
+        res.status(200).send({ error: false, message: 'Order saved to database successfully', order: order })
+    } catch(error) {
+        res.status(500).send({error: true, message: 'Some unexpected error occured'})
+    }
+})
+
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () =>  console.log('Server started at port 5000'));
